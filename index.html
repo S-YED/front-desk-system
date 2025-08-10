@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthCare Clinic - Front Desk System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <h1>HealthCare Clinic</h1>
+                <p>Front Desk Management System</p>
+            </div>
+            <div class="header-info">
+                <span id="current-date"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li>
+                    <button class="nav-btn active" data-view="dashboard">
+                        <span class="nav-icon">📊</span>
+                        Dashboard
+                    </button>
+                </li>
+                <li>
+                    <button class="nav-btn" data-view="queue">
+                        <span class="nav-icon">👥</span>
+                        Queue Management
+                    </button>
+                </li>
+                <li>
+                    <button class="nav-btn" data-view="appointments">
+                        <span class="nav-icon">📅</span>
+                        Appointment Management
+                    </button>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Dashboard View -->
+            <div id="dashboard-view" class="view active">
+                <div class="view-header">
+                    <h2>Dashboard Overview</h2>
+                    <p>Welcome to HealthCare Clinic Management System</p>
+                </div>
+                
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-content">
+                            <h3 id="queue-count">0</h3>
+                            <p>Patients in Queue</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">👨‍⚕️</div>
+                        <div class="stat-content">
+                            <h3 id="available-doctors">0</h3>
+                            <p>Available Doctors</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📅</div>
+                        <div class="stat-content">
+                            <h3 id="today-appointments">0</h3>
+                            <p>Today's Appointments</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⏰</div>
+                        <div class="stat-content">
+                            <h3 id="avg-wait">0</h3>
+                            <p>Avg Wait Time (min)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-sections">
+                    <div class="dashboard-section">
+                        <h3>Current Queue Status</h3>
+                        <div id="dashboard-queue" class="dashboard-queue"></div>
+                    </div>
+                    <div class="dashboard-section">
+                        <h3>Doctor Availability</h3>
+                        <div id="dashboard-doctors" class="dashboard-doctors"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Queue Management View -->
+            <div id="queue-view" class="view">
+                <div class="view-header">
+                    <h2>Queue Management</h2>
+                    <button class="btn btn--primary" id="add-patient-btn">
+                        + Add Patient to Queue
+                    </button>
+                </div>
+
+                <div class="controls">
+                    <div class="search-controls">
+                        <input type="text" class="form-control" id="queue-search" placeholder="Search patients...">
+                    </div>
+                    <div class="filter-controls">
+                        <select class="form-control" id="queue-filter">
+                            <option value="All">All Patients</option>
+                            <option value="Waiting">Waiting</option>
+                            <option value="With Doctor">With Doctor</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="queue-list" class="queue-list"></div>
+            </div>
+
+            <!-- Appointment Management View -->
+            <div id="appointments-view" class="view">
+                <div class="view-header">
+                    <h2>Appointment Management</h2>
+                    <button class="btn btn--primary" id="schedule-appointment-btn">
+                        + Schedule New Appointment
+                    </button>
+                </div>
+
+                <div class="controls">
+                    <div class="search-controls">
+                        <input type="text" class="form-control" id="appointment-search" placeholder="Search appointments...">
+                    </div>
+                    <div class="filter-controls">
+                        <select class="form-control" id="appointment-filter">
+                            <option value="All">All Appointments</option>
+                            <option value="Booked">Booked</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="appointments-list" class="appointments-list"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Patient Modal -->
+    <div id="add-patient-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Patient to Queue</h3>
+                <button class="modal-close" id="close-patient-modal">&times;</button>
+            </div>
+            <form id="add-patient-form" class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Patient Name *</label>
+                    <input type="text" class="form-control" id="patient-name" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone Number *</label>
+                    <input type="tel" class="form-control" id="patient-phone" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Priority</label>
+                    <select class="form-control" id="patient-priority">
+                        <option value="Normal">Normal</option>
+                        <option value="Urgent">Urgent</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn--outline" id="cancel-patient">Cancel</button>
+                    <button type="submit" class="btn btn--primary">Add to Queue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Schedule Appointment Modal -->
+    <div id="schedule-appointment-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Schedule New Appointment</h3>
+                <button class="modal-close" id="close-appointment-modal">&times;</button>
+            </div>
+            <form id="schedule-appointment-form" class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Patient Name *</label>
+                    <input type="text" class="form-control" id="appointment-patient-name" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone Number *</label>
+                    <input type="tel" class="form-control" id="appointment-patient-phone" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Doctor *</label>
+                    <select class="form-control" id="appointment-doctor" required>
+                        <option value="">Select Doctor</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Date *</label>
+                    <input type="date" class="form-control" id="appointment-date" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Time *</label>
+                    <select class="form-control" id="appointment-time" required>
+                        <option value="">Select Time</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Reason for Visit</label>
+                    <input type="text" class="form-control" id="appointment-reason" placeholder="e.g., Regular Checkup">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn--outline" id="cancel-appointment">Cancel</button>
+                    <button type="submit" class="btn btn--primary">Schedule Appointment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">
+        <span id="toast-message"></span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
