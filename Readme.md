@@ -204,4 +204,3 @@ MIT License – free to use and modify.
 
 ## 👨‍💻 Author
 **Syed Khaja Moinuddin**
-```
